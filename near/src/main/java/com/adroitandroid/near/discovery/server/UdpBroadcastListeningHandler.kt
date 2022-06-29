@@ -56,9 +56,7 @@ class UdpBroadcastListeningHandler internal constructor(looper: Looper) : Handle
                         jsonObject.getString(Host.JSON_FILTER_TEXT)
                     )
 
-                    if ((isHostClientToo || !mCurrentIps.contains(host.hostAddress)) && hostMatchesFilter(
-                            host.filterText.trim { it <= ' ' })
-                    ) {
+                    if (isHostClientToo || !mCurrentIps.contains(host.hostAddress)) {
                         var handler = mHostHandlerMap[host]
                         if (handler == null) {
                             handler = StaleHostHandler(host, mHostHandlerMap, mListener)
