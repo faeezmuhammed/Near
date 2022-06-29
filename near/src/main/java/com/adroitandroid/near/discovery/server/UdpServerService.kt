@@ -41,6 +41,7 @@ class UdpServerService : Service() {
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
+        UdpBroadcastListeningHandler.stopListeningForBroadcasts()
         stopSelf()
         super.onTaskRemoved(rootIntent)
     }

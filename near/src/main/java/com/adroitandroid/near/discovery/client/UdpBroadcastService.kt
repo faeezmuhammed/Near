@@ -9,8 +9,8 @@ import org.json.JSONObject
 
 class UdpBroadcastService : Service() {
     private var broadcastThread: BroadcastThread? = null
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (ACTION_START_BROADCAST == intent.getStringExtra(BUNDLE_ACTION)) {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (ACTION_START_BROADCAST == intent?.getStringExtra(BUNDLE_ACTION)) {
             val hostJsonString: String? = intent.getStringExtra(BUNDLE_HOST_JSON)
             val hostJson: JSONObject = if(hostJsonString != null) {
                 JSONObject(hostJsonString)
@@ -24,7 +24,7 @@ class UdpBroadcastService : Service() {
                     intent.getLongExtra(BUNDLE_INTERVAL, DEFAULT_BROADCAST_INTERVAL),
                     intent.getIntExtra(BUNDLE_DISCOVERY_PORT, UdpServerService.DISCOVERY_PORT))
             broadcastThread!!.start()
-        } else if (ACTION_STOP_BROADCAST == intent.getStringExtra(BUNDLE_ACTION)) {
+        } else if (ACTION_STOP_BROADCAST == intent?.getStringExtra(BUNDLE_ACTION)) {
             broadcastThread?.stopBroadcast()
         }
         return START_STICKY

@@ -18,7 +18,7 @@ class TcpServerService : Service() {
     private lateinit var mWakeLock: WakeLock
     private var mServerSocket: ServerSocket? = null
 
-    override fun onBind(intent: Intent): IBinder? {
+    override fun onBind(intent: Intent?): IBinder? {
         return TcpServerBinder()
     }
 
