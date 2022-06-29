@@ -18,13 +18,13 @@ class UdpServerService : Service() {
     private lateinit var mConnectivityChangeReceiver: ConnectivityObserver
     private var mStaleTimeout: Long = 0
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (COMMAND_START_SERVER == intent.getStringExtra(BUNDLE_COMMAND)) {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (COMMAND_START_SERVER == intent?.getStringExtra(BUNDLE_COMMAND)) {
             mStaleTimeout = intent.getLongExtra(BUNDLE_STALE_TIMEOUT, 10000)
             startBroadcastListening(intent.getBooleanExtra(BUNDLE_IS_HOST_CLIENT, false),
                     intent.getIntExtra(BUNDLE_DISCOVERY_PORT, DISCOVERY_PORT),
                     intent.getStringExtra(BUNDLE_REGEX) ?: "^$")
-        } else if (COMMAND_STOP_SERVER == intent.getStringExtra(BUNDLE_COMMAND)) {
+        } else if (COMMAND_STOP_SERVER == intent?.getStringExtra(BUNDLE_COMMAND)) {
             UdpBroadcastListeningHandler.stopListeningForBroadcasts()
             stopSelf()
         }

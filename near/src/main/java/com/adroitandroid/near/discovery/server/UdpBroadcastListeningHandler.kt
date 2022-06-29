@@ -50,21 +50,42 @@ class UdpBroadcastListeningHandler internal constructor(looper: Looper) : Handle
 
                 try {
                     val jsonObject = JSONObject(String(packet.data).trim { it <= ' ' })
-                    val host = Host(packet.address, jsonObject.getString(Host.JSON_NAME), jsonObject.getString(Host.JSON_FILTER_TEXT))
+                    val host = Host(
+                        packet.address,
+                        jsonObject.getString(Host.JSON_NAME),
+                        jsonObject.getString(Host.JSON_FILTER_TEXT)
+                    )
 
-                    if ((isHostClientToo || !mCurrentIps.contains(host.hostAddress)) && hostMatchesFilter(host.filterText.trim { it <= ' ' })) {
+                    if ((isHostClientToo || !mCurrentIps.contains(host.hostAddress)) && hostMatchesFilter(
+                            host.filterText.trim { it <= ' ' })
+                    ) {
                         var handler = mHostHandlerMap[host]
                         if (handler == null) {
                             handler = StaleHostHandler(host, mHostHandlerMap, mListener)
-                            synchronized(this@UdpBroadcastListeningHandler) { mHostHandlerMap.put(host, handler) }
-                            Handler(Looper.getMainLooper()).post { mListener?.onHostsUpdate(mHostHandlerMap.keys) }
+                            synchronized(this@UdpBroadcastListeningHandler) {
+                                mHostHandlerMap.put(
+                                    host,
+                                    handler
+                                )
+                            }
+                            Handler(Looper.getMainLooper()).post {
+                                mListener?.onHostsUpdate(
+                                    mHostHandlerMap.keys
+                                )
+                            }
                         } else if (hostNameChanged(host, mHostHandlerMap)) {
-                            Handler(Looper.getMainLooper()).post { mListener?.onHostsUpdate(mHostHandlerMap.keys) }
+                            Handler(Looper.getMainLooper()).post {
+                                mListener?.onHostsUpdate(
+                                    mHostHandlerMap.keys
+                                )
+                            }
                         }
                         handler.removeMessages(StaleHostHandler.STALE_HOST)
                         handler.sendEmptyMessageDelayed(StaleHostHandler.STALE_HOST, mStaleTimeout)
                     }
-                } catch (ignored: JSONException) { }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             } catch (e: SocketException) {
 
                 e.printStackTrace()
@@ -89,7 +110,10 @@ class UdpBroadcastListeningHandler internal constructor(looper: Looper) : Handle
         }
     }
 
-    private fun hostNameChanged(updatedHost: Host, hostHandlerMap: ArrayMap<Host, StaleHostHandler>): Boolean {
+    private fun hostNameChanged(
+        updatedHost: Host,
+        hostHandlerMap: ArrayMap<Host, StaleHostHandler>
+    ): Boolean {
         for (host: Host in hostHandlerMap.keys) {
             if (updatedHost == host && updatedHost.name != host.name) {
                 hostHandlerMap[updatedHost] = hostHandlerMap.remove(host)
@@ -118,12 +142,14 @@ class UdpBroadcastListeningHandler internal constructor(looper: Looper) : Handle
         private const val LISTEN = 5678
         private var handler: UdpBroadcastListeningHandler? = null
 
-        fun startBroadcastListening(hostHandlerMap: ArrayMap<Host, StaleHostHandler>,
-                                    currentHostIps: Set<String>,
-                                    isHostClientToo: Boolean,
-                                    staleTimeout: Long,
-                                    port: Int,
-                                    regex: Regex) {
+        fun startBroadcastListening(
+            hostHandlerMap: ArrayMap<Host, StaleHostHandler>,
+            currentHostIps: Set<String>,
+            isHostClientToo: Boolean,
+            staleTimeout: Long,
+            port: Int,
+            regex: Regex
+        ) {
             val handlerThread: HandlerThread = object : HandlerThread("ServerService") {
                 override fun onLooperPrepared() {
                     handler = UdpBroadcastListeningHandler(looper)
