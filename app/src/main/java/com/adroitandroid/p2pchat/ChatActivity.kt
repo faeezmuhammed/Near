@@ -96,7 +96,7 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onSendComplete(jobId: Long) {
+            override fun onSendComplete(jobId: Long, bytes: ByteArray) {
                 //update UI with sent status if necessary
             }
 

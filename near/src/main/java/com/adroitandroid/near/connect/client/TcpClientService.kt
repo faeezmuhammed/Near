@@ -26,12 +26,14 @@ class TcpClientService : Service() {
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "TcpClientService")
     }
 
-    private fun send(port: Int,
-                     data: ByteArray,
-                     destination: Host,
-                     listener: TcpClientListener,
-                     listenerLooper: Looper,
-                     jobId: Long) {
+    private fun send(
+        port: Int,
+        data: ByteArray,
+        destination: Host,
+        listener: TcpClientListener,
+        listenerLooper: Looper,
+        jobId: Long
+    ) {
         val destAddress: InetAddress
         var socket: Socket? = null
         mWakeLock.acquire(30 * 60 * 1000L)
@@ -41,7 +43,7 @@ class TcpClientService : Service() {
             val dOut = DataOutputStream(socket.getOutputStream())
             dOut.writeInt(data.size)
             dOut.write(data)
-            Handler(listenerLooper).post { listener.onSendSuccess(jobId) }
+            Handler(listenerLooper).post { listener.onSendSuccess(jobId, data) }
         } catch (e: IOException) {
             e.printStackTrace()
             Handler(listenerLooper).post { listener.onSendFailure(jobId, e) }
@@ -66,7 +68,14 @@ class TcpClientService : Service() {
             object : HandlerThread("TcpClientThread") {
                 override fun onLooperPrepared() {
                     Handler(looper).post {
-                        this@TcpClientService.send(mPort, data, destination, mListener!!, mListenerLooper!!, jobId)
+                        this@TcpClientService.send(
+                            mPort,
+                            data,
+                            destination,
+                            mListener!!,
+                            mListenerLooper!!,
+                            jobId
+                        )
                         looper.quitSafely()
                     }
                 }

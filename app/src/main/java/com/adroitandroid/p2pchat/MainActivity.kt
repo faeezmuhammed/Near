@@ -4,6 +4,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -117,7 +118,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onSendComplete(jobId: Long) {}
+            override fun onSendComplete(jobId: Long, bytes: ByteArray) {
+                Log.d("TAG", "onSendComplete: jobid: $jobId Data:${String(bytes)}")
+            }
+
             override fun onSendFailure(e: Throwable?, jobId: Long) {}
             override fun onStartListenFailure(e: Throwable?) {}
         }
