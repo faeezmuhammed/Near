@@ -4,9 +4,11 @@ import android.os.Handler
 import android.os.HandlerThread
 import org.json.JSONObject
 
-class BroadcastThread internal constructor(private val mHostJson: JSONObject,
-                                           private val mBroadcastInterval: Long,
-                                           private val port: Int) : HandlerThread("Broadcaster") {
+class BroadcastThread internal constructor(
+    private val mHostJson: JSONObject,
+    private val mBroadcastInterval: Long,
+    private val port: Int
+) : HandlerThread("Broadcaster") {
     private lateinit var mHandler: Handler
     override fun onLooperPrepared() {
         mHandler = BroadcastHandler(looper, mHostJson, mBroadcastInterval, port)
@@ -19,7 +21,8 @@ class BroadcastThread internal constructor(private val mHostJson: JSONObject,
 
     fun stopBroadcast() {
         if (isAlive) {
-            mHandler.sendEmptyMessage(BroadcastHandler.STOP_BROADCAST)
+            if (this::mHandler.isInitialized)
+                mHandler.sendEmptyMessage(BroadcastHandler.STOP_BROADCAST)
             quitSafely()
         }
     }
