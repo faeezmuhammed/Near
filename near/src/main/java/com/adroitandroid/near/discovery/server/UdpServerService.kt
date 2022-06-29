@@ -38,6 +38,11 @@ class UdpServerService : Service() {
         mConnectivityChangeReceiver.start()
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        stopSelf()
+        super.onTaskRemoved(rootIntent)
+    }
+
     private fun initCurrentDeviceIps() {
         try {
             val interfaces = NetworkInterface.getNetworkInterfaces()
