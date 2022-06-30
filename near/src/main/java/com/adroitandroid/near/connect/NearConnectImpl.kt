@@ -61,7 +61,7 @@ class NearConnectImpl(private val mContext: Context,
                     Handler(mLooper).post { mListener.onSendComplete(jobId,data) }
                 }
 
-                override fun onSendFailure(jobId: Long, e: Throwable?) {
+                override fun onSendFailure(jobId: Long,data: ByteArray, e: Throwable?) {
                     Handler(mLooper).post { mListener.onSendFailure(e, jobId) }
                 }
             }

@@ -46,7 +46,7 @@ class TcpClientService : Service() {
             Handler(listenerLooper).post { listener.onSendSuccess(jobId, data) }
         } catch (e: IOException) {
             e.printStackTrace()
-            Handler(listenerLooper).post { listener.onSendFailure(jobId, e) }
+            Handler(listenerLooper).post { listener.onSendFailure(jobId,data, e) }
         } finally {
             mWakeLock.release()
             if (socket != null) {
