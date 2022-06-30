@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven' // for JitPack
 
-group='com.github.adroitandroid' // for JitPack https://jitpack.io/docs/ANDROID/
+group = 'com.github.faeezmuhammed' // for JitPack https://jitpack.io/docs/ANDROID/
 
 android {
     compileSdkVersion 30
