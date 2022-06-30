@@ -11,7 +11,6 @@ import com.adroitandroid.near.connect.client.TcpClientListener
 import com.adroitandroid.near.connect.client.TcpClientService
 import com.adroitandroid.near.connect.server.TcpServerListener
 import com.adroitandroid.near.connect.server.TcpServerService
-import com.adroitandroid.near.model.DataToSend
 import com.adroitandroid.near.model.Host
 import java.net.InetAddress
 
