@@ -54,7 +54,7 @@ interface NearConnect {
     interface Listener {
         fun onReceive(bytes: ByteArray, sender: Host)
         fun onSendComplete(jobId: Long,bytes: ByteArray)
-        fun onSendFailure(e: Throwable?, jobId: Long)
+        fun onSendFailure(e: Throwable?, jobId: Long, bytes: ByteArray)
         fun onStartListenFailure(e: Throwable?)
     }
 }
